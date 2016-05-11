@@ -1,0 +1,49 @@
+﻿@model IList<CategoryView>
+@using Bong.Web.Models;
+
+@helper RenderCategoryLine(CategoryView category)
+{
+    <li>
+        <a href="@Url.RouteUrl("Category", new { CategoryId = category.Id })">@category.Name</a>
+        @{
+            if (category.SubCategories.Count > 0)
+            {
+                <ul class="dropdown-menu">
+                    @foreach (var subCategory in category.SubCategories)
+                    {
+                        @RenderCategoryLine(subCategory)
+                    }
+                </ul>
+            }
+        }
+    </li>
+}
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        @Html.ActionLink("Bong", "Index", "Home", new { area = "" }, new { @class = "navbar-brand hidden-lg hidden-md" })
+    </div>
+    <div class="navbar-collapse collapse" id="main-navbar-collapse">
+        <ul class="nav navbar-nav">
+            @if (Model.Count > 0)
+            {
+                foreach (var category in Model)
+                {
+                    @RenderCategoryLine(category)
+                }
+            }
+            else
+            {
+                // In the case of no categories, show defalt items
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+                <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+            }
+        </ul>
+    </div>
+</nav>

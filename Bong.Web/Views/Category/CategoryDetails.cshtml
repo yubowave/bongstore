@@ -1,0 +1,78 @@
+﻿@model CategoryDetailModel
+@using Bong.Web.Models;
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    @foreach (var item in Model.CategoryBreadcrumb)
+    {
+        if (item.Id == Model.Id)
+        {
+            <li class="active">@item.Name</li>
+        }
+        else
+        {
+            <li><a href="@Url.RouteUrl("Category", new { categoryId = item.Id })">@item.Name</a></li>
+        }
+    }
+</ol>
+<h3>@Model.Name</h3>
+<div class="container">
+    @if (Model.SubCategories.Count > 0)
+    {
+        <div class="row">
+            @foreach (var item in Model.SubCategories)
+            {
+                <div class="col-md-3">
+                    <div class="category-grid-item">
+                        <a href="@Url.RouteUrl("Category", new { categoryId = item.Id })" class="thumbnail">
+                            <div class="text-center">@item.Name</div>
+                            <img src="@item.PictureModel.ImageUrl" alt="" data-toggle="tooltip"
+                                 data-placement="bottom" title="@item.PictureModel.Title">
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (Model.Products.Count > 0)
+    {
+        <div class="product-panel"><h4>Products</h4></div>
+        <div class="row">
+            <div class="col-md-6">
+                <select class="ui-corner-left" style="display:none">
+                    <option value="Position">Position</option>
+                    <option value="A-Z">Name:A to Z</option>
+                    <option value="Z-A">Name:Z to A</option>
+                    <option value="L-H">Price:Low to High</option>
+                    <option value="H-L">Price:High to Low</option>
+                    <option value="Date">Created on</option>
+                </select>
+            </div>
+            <div class="col-md-6 btn-group">
+                <a href="#" id="list" class="btn btn-sm pull-right">
+                    <span class="glyphicon glyphicon-th-list"></span>List
+                </a>
+                <a href="#" id="grid" class="btn btn-sm pull-right">
+                    <span class="glyphicon glyphicon-th"></span>Grid
+                </a>
+            </div>
+        </div>
+        <div id="products" class="row product-grid">
+            @foreach (var product in Model.Products)
+            {
+                @Html.Partial("_ProductView", product);
+            }
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#list').click(function (event) { event.preventDefault(); $('#products').removeClass('product-grid'); $('#products').addClass('product-list'); });
+        $('#grid').click(function (event) { event.preventDefault(); $('#products').removeClass('product-list'); $('#products').addClass('product-grid'); });
+    });
+</script>

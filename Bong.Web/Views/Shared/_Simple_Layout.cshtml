@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bong eStore - @ViewBag.Title</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Yu's ASP.MVC Sample" />
+    <meta name="keywords" content="ASP.NET MVC" />
+    <meta name="generator" content="Alan Yu" />
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/x-icon" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bong")
+</head>
+<body>
+    <div class="container">
+        <section class="row">
+            <div class="well">
+                @RenderBody()
+            </div>
+        </section>
+    </div>
+</body>
+</html>

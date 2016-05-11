@@ -1,0 +1,40 @@
+﻿@model CategoryNavModel
+@using Bong.Web.Models;
+
+@helper RenderCategory(CategoryView category)
+{
+    int currentId = Model.CurrentCategoryId.HasValue ? Model.CurrentCategoryId.Value : 0;
+    <li class=@(category.Id == currentId ? "active" : "inactive")>
+        <a href="@Url.RouteUrl("Category", new { categoryId = category.Id })">@category.Name</a>
+        @{
+            if (category.Id == currentId || category.SubCategories.Count() > 0)
+            {
+                <ul>
+                    @foreach (var subCategory in category.SubCategories)
+                    {
+                        @RenderCategory(subCategory)
+                    }
+                </ul>
+            }
+        }
+    </li>
+}
+
+<div class="panel panel-success">
+    <div class="panel-heading"><strong>CATEGORIES</strong></div>
+    <div class="panel-body">
+        @if (Model.Categories.Count > 0)
+        {
+            <ul class="list-group">
+                @foreach (var category in Model.Categories)
+                {
+                    @RenderCategory(category)
+                }
+            </ul>
+        }
+        else
+        {
+        <h6>No Categories.</h6>
+        }
+    </div>
+</div>

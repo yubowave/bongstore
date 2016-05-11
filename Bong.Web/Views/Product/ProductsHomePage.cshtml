@@ -1,0 +1,11 @@
+﻿@model IList<Bong.Web.Models.ProductViewModel>
+
+<div class="row text-center">
+    <h4>FEATURED PRODUCTS</h4>
+</div>
+<div id="products" class="row product-grid">
+    @foreach (var product in Model)
+    {
+        @Html.Partial("_ProductView", product);
+    }
+</div>

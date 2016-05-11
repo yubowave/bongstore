@@ -1,0 +1,70 @@
+﻿@model Bong.Web.Models.ShoppingCartModel
+
+@{
+    ViewBag.Title = "Your Wish List";
+    Layout = "~/Views/Shared/_Root.cshtml";
+}
+
+<div class="container">
+    <h4>@ViewBag.Title</h4>
+    @if (Model.Items.Count > 0)
+    {
+        using (Html.BeginRouteForm("Wishlist", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <colgroup>
+                            <col width="1" />
+                            <col />
+                            <col width="1" />
+                            <col width="1" />
+                            <col width="1" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Remove</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="removefromlist" value="@item.Id" />
+                                    </td>
+                                    <td>
+                                        <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title" />
+                                        <a href="@Url.RouteUrl("Product", new { productId = item.ProductId})">@item.ProductName</a>
+                                    </td>
+                                    <td>
+                                        <span>@item.ItemPrice.ToString("C")</span>
+                                    </td>
+                                    <td>
+                                        <span>@item.Quantity</span>
+                                    </td>
+                                    <td>
+                                        <span>@item.SubTotal.ToString("C")</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <button name="updatewishlist" type="submit" class="btn btn-default btn-sm">Update wishlist</button>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-center">Your Shopping Cart is empty! </p>
+    }
+</div>

@@ -1,0 +1,22 @@
+﻿@{
+    var logoPath = "~/Content/images/logo.gif";
+}
+
+<Header class="row">
+    <div class="col-md-8">
+        <a class="top-left" href="@Url.RouteUrl("Home")" >
+            <img class="img-responsive" data-toggle="tooltip" data-placement="bottom" 
+                 title="Bong eStore" src="@Url.Content(logoPath)">
+        </a>
+        <p></p>
+    </div>
+    <div class="col-md-4" id="header-links">
+        <p></p>
+        <p class="text-left">
+           @Html.Action("HeaderLinks", "Common")
+        </p>
+        <p class="text-right">
+            @Html.Action("SearchPart", "Category")
+        </p>
+    </div>
+</Header>

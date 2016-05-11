@@ -1,0 +1,110 @@
+﻿@model CategoryListModel
+@using Bong.Core.Infrastructure
+@using Bong.Web.Areas.Admin.Models;
+
+@{
+    ViewBag.Title = "Categories";
+    
+    // Default page size
+    int defaultPageSize = TheSystem.Current.Resolve<Bong.Core.Configuration.SystemSetting>().DefaultListPageSize;
+}
+
+<div class="content-header">
+    <div class="title">
+        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+        Categories
+    </div>
+</div>
+
+<div class="form-inline">
+    <div class="form-group">
+        <span class="text-right">Category Name:</span>
+    </div>
+    <div class="form-group">
+        <input class="form-control" id="SearchCategoryName" name="SearchCategoryName" type="text" />
+    </div>
+    <button id="btnSearch" class="btn btn-default">Search</button>
+</div>
+
+<div class="">
+        <a class="btn btn-default" href="@Url.Action("Create")">Add new</a>
+</div>
+
+<div class="datagrid">
+    <div id="category-grid"></div>
+    <script>
+    $(document).ready(function () {
+        $("#category-grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("List", "Category"))",
+                        type: "POST",
+                        dataType: "json",
+                        data: additionalData
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors"
+                },
+                error: function(e) {
+                    display_kendoui_grid_error(e);
+                    this.cancelChanges();
+                },
+                pageSize: @defaultPageSize,
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            pageable: true,
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns: [{
+                field: "Name",
+                title: "Name"
+            },{
+                field: "CreatedOn",
+                title: "Updated On",
+                width: 200,
+                type: "date",
+                format: "{0:G}"
+            }, {
+                field: "Id",
+                title: "Edit",
+                width: 100,
+                template: '<a href="Edit/#=Id#">Edit</a>'
+            }]
+        });
+    });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnSearch').click(function () {
+                var grid = $('#category-grid').data('kendoGrid');
+                grid.dataSource.page(1); 
+                grid.dataSource.read();
+                return false;
+            });
+
+            $("#SearchCategoryName").keydown(function (event) {
+                if (event.keyCode == 13) {
+                    $("#btnSearch").click();
+                    return false;
+                }
+            });
+        });
+
+        function additionalData() {
+            return {
+                SearchCategoryName: $('#SearchCategoryName').val()
+            };
+        }
+    </script>
+</div>

@@ -1,0 +1,51 @@
+﻿@model SubscriptionModel
+@using Bong.Web.Models;
+
+<div class="panel panel-success">
+    <div class="panel-heading"><strong>SUBSCRIBE</strong></div>    
+    <div class="panel-body">
+        <div id="subscribe-block" class="form-group input-group-sm">
+            <span class="label label-info">Email address:</span>
+            @Html.TextBoxFor(x => x.SubscriberEmail, new { id = "subscribe-email", @class = "form-control input-sm" })
+            @Html.ValidationMessageFor(x => x.SubscriberEmail)
+            <div class="buttons">
+                <button id="subscribe-button" type="button" class="btn btn-primary btn-xs">subscribe</button>
+                <span id="subscribe-loading-progress" style="display: none;">...</span>
+            </div>
+        </div>
+        <div id="subscribe-result-block" class="alert alert-warning" style="display:none;">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#subscribe-button').click(function () {
+
+            var email = $("#subscribe-email").val();
+            var subscribeProgress = $("#subscribe-loading-progress");
+            subscribeProgress.show();
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl("Subscribe"))",
+                data: { "email": email },
+                success: function (data) {
+                    subscribeProgress.hide();
+                    $("#subscribe-result-block").html(data.Result);
+                    if (data.Success) {
+                        $('#subscribe-block').hide();
+                        $('#subscribe-result-block').show();
+                    }
+                    else {
+                        $('#subscribe-result-block').fadeIn("slow").delay(2000).fadeOut("slow");
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to subscribe.');
+                    subscribeProgress.hide();
+                }
+            });
+            return false;
+        });
+    });
+</script>

@@ -1,0 +1,14 @@
+﻿@model Bong.Web.Models.HeaderModel
+
+<script type="text/javascript">
+    AjaxAddtoCart.init('#header-links .cart-qty', '#header-links .wish-qty');
+</script>
+
+<a class="btn btn-info btn-xs disabled" href="@Url.RouteUrl("Register")">Register</a>
+<a class="btn btn-info btn-xs disabled" href="@Url.RouteUrl("Login")">Login</a>
+<a class="btn btn-success btn-xs" href="@Url.RouteUrl("ShoppingCart")">
+    Shopping Cart<span class="badge cart-qty">@Model.ShoppingCartItems</span>
+</a>
+<a class="btn btn-success btn-xs" href="@Url.RouteUrl("Wishlist")">
+    Wishlist<span class="badge wish-qty">@Model.WishListItems</span>
+</a>

@@ -1,0 +1,49 @@
+﻿
+<div class="row">
+    <div class="col-md-3">
+        <div class="footercol">
+            <h5>Information</h5>
+            <ul class="list-unstyled">
+                <li><a href="#">Sitemap</a></li>        @*@Url.RouteUrl("Sitemap")*@
+                <li><a href="@Url.RouteUrl("PrivacyPolicy")">Privacy Notice</a></li>
+                <li><a href="@Url.RouteUrl("AboutUs")">About us</a></li>
+                <li><a href="@Url.RouteUrl("ContactUs")">Contact us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="footercol">
+            <h5>Customer service</h5>
+            <ul class="list-unstyled">
+                <li><a href="#">Search</a></li>     @*@Url.RouteUrl("ProductSearch")*@
+                @*<li><a href="/news">News</a></li>
+                <li><a href="/blog">Blog</a></li>*@
+                <li><a href="@Url.RouteUrl("RecentViewedProducts")">Recently viewed products</a></li>
+                <li><a href="@Url.RouteUrl("NewProducts")">New products</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="footercol">
+            <h5>My account</h5>
+            <ul class="list-unstyled">
+                @*<li><a href="/customer/info">My account</a></li>
+                <li><a href="/customer/orders">Orders</a></li>
+                <li><a href="/customer/addresses"</a></li>*@
+                <li><a href="#">Shopping cart</a></li>  @*@Url.RouteUrl("ShoppingCart")*@
+                <li><a href="#">Wishlist</a></li>   @*@Url.RouteUrl("Wishlist")*@
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="footercol">
+            <h5>Follow us</h5>
+            <ul class="list-unstyled">
+                <li class="facebook"><a href="http://www.facebook.com/" target="_blank">Facebook</a></li>
+                <li class="twitter"><a href="https://twitter.com/" target="_blank">Twitter</a></li>
+                <li class="youtube"><a href="http://www.youtube.com/user/" target="_blank">YouTube</a></li>
+                <li class="google-plus"><a href="https://plus.google.com/" target="_blank">Google+</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

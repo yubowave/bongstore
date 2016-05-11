@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_Root.cshtml";
+    
+    //current category ID
+    int currentCategoryId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("Category", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("CategoryDetails", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentCategoryId = Convert.ToInt32(Url.RequestContext.RouteData.Values["categoryId"].ToString());
+    }
+
+    //current product ID
+    int currentProductId = 0;
+    if (Url.RequestContext.RouteData.Values["controller"].ToString().Equals("Product", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.RequestContext.RouteData.Values["action"].ToString().Equals("Productdetails", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentProductId = Convert.ToInt32(Url.RequestContext.RouteData.Values["productId"].ToString());
+    }
+}
+
+<div class="col-md-3 hidden-xs">
+    @Html.Action("NavCategeries", "Category", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
+    @Html.Action("LatestViewProductsPart", "Product", new { showPicSize = 32 })
+    @Html.Action("SubscribeWidget", "Common")
+</div>
+<div class="col-md-9">
+    @RenderBody()
+</div>

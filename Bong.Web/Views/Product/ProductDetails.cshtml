@@ -1,0 +1,110 @@
+﻿@model ProductDetailModel
+@using Bong.Web.Models
+@using Bong.Core.Domain.Orders;
+
+@{
+    ViewBag.Title = Model.Name;
+    
+    // addtowishlink
+    var wishlistTypeId = (int)ShoppingCartType.Wishlist;
+    string addtowishlink = Url.RouteUrl("AddProductToCart", new { productId = Model.Id, shoppingCartTypeId = wishlistTypeId, quantity = 1, });
+}
+
+<ol class="breadcrumb">
+    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+    @foreach (var item in Model.CategoryBreadcrumb)
+    {
+        <li><a href="@Url.RouteUrl("Category", new { categoryId = item.Id })">@item.Name</a></li>
+    }
+    <li class="active">@Model.Name</li>
+</ol>
+
+<div class="panel panel-default">
+    <div class="panel-body product-detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <img src="@Model.DefaultPictureModel.ImageUrl" data-toggle="tooltip"
+                         data-placement="top" title="@Model.DefaultPictureModel.Title">
+                    <div class="detail-pics">
+                        @{
+                            int index = 0;
+                            foreach (var pictureModel in Model.PictureModels)
+                            {
+                                if (index++ >= 4)
+                                {
+                                    break;
+                                }
+                                <img src="@pictureModel.ImageUrl" data-toggle="tooltip"
+                                     data-placement="top" title="@pictureModel.Title">
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="col-md-7 panel panel-default">
+                    <div class="product-info">
+                        <p><h4>@Model.Name</h4></p>
+                        <p>@Model.ShortDescription</p>
+                        <div class="rating-box" title="Reviews.TotalReviews">
+                            <div class="rating" data-toggle="tooltip" data-placement="top" title="@string.Format("{0} Reviews", @Model.TotalReviews)">
+                                <div class="rating-2" style="width: @(Model.AverageRate)%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#">@Model.TotalReviews review(s)</a> | <a href="#">Add your review</a>
+                        </div>
+                        <p>
+                            @if (Model.OldPrice > 0)
+                            {
+                                <div>
+                                    OldPrice: <span><del> @Model.OldPriceDisplay</del></span>
+                                </div>
+                            }
+                            <div>
+                                Price: <span class="price"> @Model.PriceDisplay</span>
+                            </div>
+                        </p>
+                        <div class="form-inline row">
+                            <div class="col-xs-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon">Quantity:</span>
+                                    <input type="number" class="form-control input-sm" id="inputQuantity" value="1">
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <button id="add-to-cart" type="button" class="btn btn-success btn-sm">Add to cart</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <button id="add-to-wishlist" type="button" class="btn btn-default btn-sm" 
+                                        onclick="AjaxAddtoCart.addproducttocart('@addtowishlink'); return false;">Add to wishlist</button>
+                            </div>
+                            <div class="col-xs-3">
+                                <button id="email-to" type="button" class="btn btn-default btn-sm">Email a friend</button>
+                            </div>
+                        </div>
+                        <p />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 panel panel-default">
+                    <div>
+                        <p />@Html.Raw(Model.Description)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#add-to-cart').click(function () {
+            var strquantity = $("#inputQuantity").val();
+            AjaxAddtoCart.addproducttocart_detail('@Url.RouteUrl("AddProductToCart-Detail", new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart })', strquantity);
+            return false;
+        });
+    });
+</script>

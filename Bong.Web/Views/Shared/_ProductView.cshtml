@@ -1,0 +1,43 @@
+﻿@model ProductViewModel
+@using Bong.Web.Models
+@using Bong.Core.Domain.Orders;
+
+@{
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    string addtocartlink = Url.RouteUrl("AddProductToCart", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = 1, });
+}
+
+<div class="col-md-3 item-box col-sm-4 col-xs-6">
+    <div class="thumbnail product-item">
+        <a href="@Url.RouteUrl("Product", new { productId = Model.Id })">
+            <div class="picture">
+                <img src="@Model.PictureModel.ImageUrl" data-toggle="tooltip"
+                     data-placement="top" title="@Model.PictureModel.Title">
+            </div>
+        </a>
+        <div class="details">
+            <h5 class="title">
+                <a href="@Url.RouteUrl("Product", new { productId = Model.Id })">@Model.Name</a>
+            </h5>
+            <div class="rating-box" title="Reviews.TotalReviews">
+                <div class="rating" data-toggle="tooltip" data-placement="top" title="@string.Format("{0} Reviews", @Model.TotalReviews)">
+                    <div class="rating" style="width: @(Model.AverageRate)%"></div>
+                </div>
+            </div>
+            <div class="description">
+                @Model.ShortDescription
+            </div>
+            <div class="buttons">
+                <div class="price">
+                    <span>@Model.PriceDisplay</span>
+                </div>
+                <div class="add-button">
+                    <input type="button" value="Add to cart" class="btn btn-success btn-xs"
+                           onclick="AjaxAddtoCart.addproducttocart('@addtocartlink'); return false;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

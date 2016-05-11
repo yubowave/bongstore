@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Your Shopping Cart";
+    Layout = "~/Views/Shared/_Root.cshtml";
+    string getcartlink = Url.RouteUrl("GetCart");
+    string cartLink = Url.RouteUrl("ShoppingCart");
+}
+
+@Scripts.Render("~/bundles/knockout")
+
+<div class="container">
+    <h4>@ViewBag.Title</h4>
+    <!-- ko if: scitems().length > 0 -->
+    <form action="@cartLink" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <colgroup>
+                        <col />
+                        <col width="1" />
+                        <col width="1" />
+                        <col width="1" />
+                        <col width="1" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: scitems">
+                        <tr>
+                            <td>
+                                <img data-bind="attr: {src:imageurl, title:productname}" />
+                                <a data-bind="attr: { href: producturl, title: productname }, html:productname"></a>
+                            </td>
+                            <td>
+                                $<span data-bind="html: price.toFixed(2)"></span>
+                            </td>
+                            <td>
+                                <input data-bind="value: quantity, name:id" type="text" class="form-control" />
+                            </td>
+                            <td>
+                                $<span data-bind="html: subtotal().toFixed(2)"></span>
+                            </td>
+                            <td>
+                                <a href="#" data-bind="click: $parent.removeItem">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                $<span data-bind="html: $root.total().toFixed(2)"></span>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <input type="hidden" name="scitems" data-bind="value: ko.toJSON(scitems)" />
+                <button name="updatecart" type="submit" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update your cart">Update shopping cart</button>
+            </div>
+        </div>
+    </form>
+    <!-- /ko -->
+    <!-- ko if: scitems().length == 0 -->
+    <p class="text-center">Your Shopping Cart is empty! </p>
+    <!-- /ko -->
+</div>
+
+<script type="text/javascript">
+    function SCItem(data) {
+        this.id = data.id;
+        this.imageurl = data.imageurl;
+        this.productname = data.productname;
+        this.producturl = data.producturl;
+        this.price = data.price;
+        this.quantity = ko.observable(data.quantity);
+        this.subtotal = ko.computed(function () {
+            return this.price * this.quantity();
+        }, this);
+    }
+
+    function ShoppingCartViewMode() {
+        var self = this;
+        self.scitems = ko.observableArray([]);
+        self.total = ko.computed(function () {
+            var total = 0;
+            for (var i = 0; i < self.scitems().length; i++) {
+                //if (!self.scitems()[i]._destroy)
+                total += self.scitems()[i].subtotal();
+            }
+            return total;
+        });
+
+        self.removeItem = function (item) { self.scitems.remove(item) };
+
+        $.ajax({
+            type: "GET",
+            cache: false,
+            url: "@getcartlink",
+            success: function (allData) {
+                var mappedItems = $.map(allData, function (data) { return new SCItem(data) });
+                self.scitems(mappedItems);
+            }
+        });
+    }
+    ko.applyBindings(new ShoppingCartViewMode());
+</script>
